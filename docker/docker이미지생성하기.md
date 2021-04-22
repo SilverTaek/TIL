@@ -32,3 +32,54 @@ docker build --tag echoalpine:1.0 .
 ## SpringBoot프로젝트 도커 이미지 생성 및 실행
 이제는 기존에 작업중이던 SpringBoot jar파일 기준으로 도커 이미지를 생성하고 실행해보는 과정을 진행해보겠습니다.
 
+## SpringBoot Dockerfile 생성
+```
+FROM adoptopenjdk/openjdk11:ubi
+VOLUME /tmp
+EXPOSE 8197
+ARG JAR_FILE=build/libs/*.jar
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+```
+
+## React NGINX Dockerfile 생성
+```
+FROM node:12.16.1-alpine as builder
+RUN mkdir homepage
+WORKDIR /homepage
+ADD . .
+RUN yarn install
+RUN yarn build
+
+FROM nginx:stable-alpine as production
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+RUN true
+COPY --from=builder /homepage/build /usr/share/nginx/html
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## Docker 이미지 생성하기
+```
+$ sudo docker build -t frontend .
+$ sudo docker build -t backend .
+```
+
+## Docker 컨테이너 생성하기
+```
+$ sudo docker run -d -p 80:80 frontend
+$ sudo docker run -d -p 8197:8197 backend
+```
+
+## 실행중인 Docker 컨테이너 확인하기
+```
+$ sudo docker ps -a
+```
+## Docker 이미지 삭제하기
+```
+$ sudo docker rmi {이미지이름}
+```
+## Docker 컨테이너 삭제하기
+```
+$ sudo docker rm {컨테이너이름}
+```

@@ -34,11 +34,14 @@ docker build --tag echoalpine:1.0 .
 
 ## SpringBoot Dockerfile 생성
 ```
-FROM adoptopenjdk/openjdk11:ubi
+FROM openjdk:11 AS builder
 VOLUME /tmp
+COPY . .
+RUN chmod +x ./gradlew
+RUN ./gradlew build
+FROM adoptopenjdk:11-jdk
+COPY --from=builder build/libs/*.jar app.jar
 EXPOSE 8197
-ARG JAR_FILE=build/libs/*.jar
-ADD ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 ```
 
@@ -58,7 +61,19 @@ COPY --from=builder /homepage/build /usr/share/nginx/html
 EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
 ```
+## Nginx.conf
+```
+server{
+	listen 80;
+	client_max_body_size 5M;
+	
+	location / {
+		alias /usr/share/nginx/html/;
+		try_files $uri $uri/ /index.html;
+	}
+}
 
+```
 ## Docker 이미지 생성하기
 ```
 $ sudo docker build -t frontend .

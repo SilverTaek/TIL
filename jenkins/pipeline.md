@@ -31,35 +31,31 @@ post : 작업이 모두 끝나고 나서의 처리
 
 ## Jenkinsfile 작성
 ```
-pipeline { //파이프라인이라는것을 선언
-    agent none // none이기때문에 master agent에서 실행
+pipeline {
+    agent none 
     options { skipDefaultCheckout(false)}
     stages {
-        stage('git pull') { # pull 받아오는 상태
-            agent any //마스터에서 실행
+        stage('git pull') {
+            agent any 
             steps {
                 checkout scm
             }
         }
-        stage('Docker build') { #docker build 상태
+        stage('Docker build') {
             agent any
             steps {
-                sh 'docker build -t frontend:latest /var/jenkins_home/workspace/jenkins-cicd/frontend' 
-				# frontend -t 는 생성할 이미지 이름. 
-				sh 'docker build -t backend:latest /var/jenkins_home/workspace/jenkins-cicd/backend' 
-				# backend 도커가 있는 위치. 빌드는 도커 이미지 파일을 만들어 주는 것입니다!! 아직 실행 X
+                sh 'docker build -t frontend:latest /var/jenkins_home/workspace/jenkins_test/frontend'
+				sh 'docker build -t backend:latest /var/jenkins_home/workspace/jenkins_test/backend'
             }
         }
-        stage('Docker run') { # docker 배포 상태
+        stage('Docker run') {
             agent any
             steps {
-                # 도커 시작 전, 기존에 실행중인 도커를 멈추고 제거하는 작업
                 sh 'docker ps -f name=frontend -q \
         | xargs --no-run-if-empty docker container stop'
 				sh 'docker ps -f name=backend -q \
 		| xargs --no-run-if-empty docker container stop'
 
-                # 컨테이너 제거
                 sh 'docker container ls -a -f name=frontend -q \
         | xargs -r docker container rm'
 				sh 'docker container ls -a -f name=backend -q \

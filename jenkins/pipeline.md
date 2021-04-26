@@ -61,8 +61,15 @@ pipeline {
 				sh 'docker container ls -a -f name=backend -q \
 		| xargs -r docker container rm'
 
-                sh 'docker run -d --name backend -p 8197:8197 backend:latest'
-                sh 'docker run -d --name frontend -p 80:80 frontend:latest'
+                sh 'docker run -d --name backend \
+                -p 8197:8197 \
+                --network checkmate backend:latest'
+                sh 'docker run -d --name frontend \
+                -p 80:80 \
+                -p 443:443 \
+                -v /home/ubuntu/sslkey/:/var/jenkins_home/workspace/jenkins_test/sslkey/ \
+                --network checkmate \
+                frontend:latest'
             }
         }
     }

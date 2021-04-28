@@ -35,14 +35,16 @@ docker build --tag echoalpine:1.0 .
 ## SpringBoot Dockerfile 생성
 ```
 FROM openjdk:11 AS builder
-VOLUME /tmp
+RUN mkdir files
+VOLUME ["/tmp, /files"]
 COPY . .
 RUN chmod +x ./gradlew
-RUN ./gradlew build
+RUN ./gradlew clean build
 FROM adoptopenjdk:11-jdk
 COPY --from=builder build/libs/*.jar app.jar
 EXPOSE 8197
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
 ```
 
 ## React NGINX Dockerfile 생성
@@ -110,18 +112,18 @@ server {
         }
 
         location /api {
-                proxy_pass http://backend:8197;
-                proxy_http_version 1.1;
-                proxy_set_header Connection "";
+                proxy_pass http://k4a106.p.ssafy.io:8197/;
+                proxy_redirect off;
+                charset utf-8;
 
-                proxy_set_header Host $host;
+                proxy_set_header Host $http_host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Forwarded-Proto $scheme;
-                proxy_set_header X-Forwarded-Host $host;
-                proxy_set_header X-Forwarded-Port $server_port;
+                proxy_set_header X-Nginx-Proxy true;
         }
 }
+
 
 ```
 ## Docker 이미지 생성하기

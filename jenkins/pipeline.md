@@ -33,7 +33,7 @@ post : 작업이 모두 끝나고 나서의 처리
 ```
 pipeline {
     agent none 
-    options { skipDefaultCheckout(false)}
+    options { skipDefaultCheckout(true)}
     stages {
         stage('git pull') {
             agent any 
@@ -44,8 +44,8 @@ pipeline {
         stage('Docker build') {
             agent any
             steps {
-                sh 'docker build -t frontend:latest /var/jenkins_home/workspace/jenkins_test/frontend'
-				sh 'docker build -t backend:latest /var/jenkins_home/workspace/jenkins_test/backend'
+                sh 'docker build -t frontend:latest ./frontend'
+				sh 'docker build -t backend:latest ./backend'
             }
         }
         stage('Docker run') {
@@ -63,6 +63,7 @@ pipeline {
 
                 sh 'docker run -d --name backend \
                 -p 8197:8197 \
+                -v /home/ubuntu/files/:/files \
                 --network checkmate backend:latest'
                 sh 'docker run -d --name frontend \
                 -p 80:80 \
@@ -74,4 +75,5 @@ pipeline {
         }
     }
 }
+
 ```

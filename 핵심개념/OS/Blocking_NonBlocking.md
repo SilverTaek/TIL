@@ -21,17 +21,19 @@
 
 ## Synchronous Blocking I/O
 ![image](https://user-images.githubusercontent.com/43171179/123688334-d544a980-d88c-11eb-84a4-a5fe74bc5749.png)
-
+예시 : 상사는 기다리라고함 관심을 가지며 기다리다가 결과를 주면 바로 처리 ex) 입출력
 ## Synchronous Non-Blocking I/O
 ![image](https://user-images.githubusercontent.com/43171179/123688418-eb526a00-d88c-11eb-8c79-b1f2fe5ab98f.png)
-
+예시 : 다른 작업이 있어도 자신의 제어권을 가지고 일을 함 중간중간마다 물어봄
 ## Asynchronous Non-Blocking I/O (AIO)
 ![image](https://user-images.githubusercontent.com/43171179/123688513-0cb35600-d88d-11eb-981a-ab0d0545affa.png)
-
+다른 작업이 시작되어도 자신이 하던 작업을 멈추지 않음 자신의 일이 끝나야 그때서야 처리
 ## Asynchronous Blocking 
 Asynchronous Blocking 조합은 비효율적이라 직접적으로 사용하는 모델은 없다. 하지만 Asynchronous Non-Blocking 모델 중에서 Blocking 으로 동작하는 작업이 있는 경우 의도와 다르게 Asynchronous Blocking으로 동작할 때가 있다고 한다.
 
 대표적인 예로는 Node.js와 MySQL을 함께 사용하는 경우이다. Node.js는 비동기로 작업하려 하지만 MySQL 드라이버가 Blocking 방식으로 동작하므로 어쩔 수 없이 Asynchronous Blocking 방식으로 동작하게 된다.
+
+결과를 바로 처리하지 않아도 됨
 
 # 정리
 Synchronous VS Asynchronous

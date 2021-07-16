@@ -42,3 +42,7 @@ JPA(Java Persistence API)
 - GenerationType.AUTO : 각 데이터베이스 방언에 따라 자동으로 지정(기본 값)
 - GenerationType.TABLE
 - GenerationType.SEQUENCE : 데이터베이스의 시퀀스를 이용해서 키 값을 생성
+
+## Builder 패턴
+해당 클래스의 빌더 패턴 클래스를 생성
+생성자 상단에 선언 시 생성자에 포함된 필드만 빌더에 포함

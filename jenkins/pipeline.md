@@ -29,7 +29,7 @@ parameters : 변수 설정 블럭
 post : 작업이 모두 끝나고 나서의 처리
 ```
 
-## Jenkinsfile 작성
+## Jenkinsfile 작성 dasdasdas
 ```
 pipeline {
     agent none 

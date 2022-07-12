@@ -54,3 +54,35 @@ constructor(todoService: TodoService) {
 
 constructor(private todoService: TodoService) {}
 ```
+
+### dto
+
+class vs interface
+
+클래스는 인터페이스와 다르게 런타임에서 작동하기 때문에 파이프 같은 기능을 이용할 때 더 유용하다.
+
+### pipes
+
+transformer
+validator
+
+### 커스텀 파이프 구현 방법
+
+### typeorm
+
+node js 에서 실행되고 typeScript로 작성된 객체 관계형
+
+@nestjs/typeorm
+
+mysql 모듈
+npm install --save @nestjs/typeorm typeorm mysql2
+
+### entity
+
+### 삭제
+
+remove vs delete
+remove : 무조건 존재하는 아이템을 지워야함 아니면 에러남
+delete : 만약 아이템이 존재하면 지우고 존재하지 않으면 영향이 없다. => 작업을 한번만 사용
+
+따라서 delete를 사용

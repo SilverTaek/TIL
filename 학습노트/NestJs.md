@@ -109,3 +109,114 @@ remove : 무조건 존재하는 아이템을 지워야함 아니면 에러남
 delete : 만약 아이템이 존재하면 지우고 존재하지 않으면 영향이 없다. => 작업을 한번만 사용
 
 따라서 delete를 사용
+
+### 코드 리뷰
+
+any 타입?
+Exception
+
+- nestjs exception filter (사용자 에러 find)
+- validate
+- server error
+  try catch
+  TypeORM 옵션들에 대해 살펴보기
+
+### AOP & 데코레이터
+
+================================================================================================================================
+
+- DI / IOC
+
+SOLID원칙의 D에 해당하는 의존성 역전 원칙을 구현하기 위해서는 IoC 컨테이너라는 기술이 필요하다.
+프로파이더를 다른 컴포넌트에 주입할 때 사용했던 기술
+IOC의 도움으로 객체의 라이프 사이클에 신경쓰지 않아도 된다. 이는 곧 가비지 컬렉터가 알아서 관리해주기 때문에 신경쓰지 않아도 된다. 이로 인해서 코드가 간결해지고 이해하기 쉬워지게 되는 것도 큰 장점이다.
+
+DI는 이렇게 IoC컨테이너가 직접 객체의 생명주기를 관리하는 방식이다.
+
+```
+export interface Person {
+  getName: () => string;
+}
+
+@Injectable()
+export class Dexter implements Person {
+  getName() {
+    return 'Dexter';
+  }
+}
+
+@Injectable()
+export class Jane implements Person {
+  getName() {
+    return 'Jane';
+  }
+}
+
+class MyApp {
+    private person: Person;
+    constructor() {
+        this.person = new Dexter();
+    }
+}
+
+
+```
+
+```
+class MyApp {
+    constructor(@Inject('Person') private p: Person) { }
+}
+```
+
+```
+@Module({
+  controllers: [UsersController],
+  providers: [
+    UsersService,
+    {
+      provide: 'Person',
+      useClass: Dexter
+    }
+  ]
+})
+...
+```
+
+- 프로바이더(provider)
+  컨트롤러는 요청과 응답을 가공하고 처리하는 역할을 맡는다.
+  하지만 서버가 제공하는 핵심기능은 전달받은 데이터를 어떻게 비즈니스 로직으로 해결하는가?
+  즉, 비즈니스 로직을 수행하는 역할을 하는 것이 프로바이더이다. 소프트웨어 구조상 분리해 두는 것이 단일 책임 원칙(SRP)
+  프로바이더의 핵심은 의존성을 주입할 수 있다는 것
+
+의존성을 주입하기 위한 라이브러리가 많이 있지만 Nest가 이를 제공 의존성 주입은 OOP에서 많이 활용하고 있는 기법 관심사를 분리할 수 있다.
+
+`Injectable()` 데코레이터를 사용하여 다른 어떤 Nest 컴포넌트에서도 주입할 수 있는 프로바이더가 된다.
+
+별도의 스코프를 지정해 주지 않으면 일반적으로 싱글톤 인스턴스가 생성된다.
+
+속성 기반 프로바이더
+
+```
+export class BaseService {
+  @Inject(ServiceA) private readonly serviceA: ServiceA;
+    ...
+
+    doSomeFuncFromA(): string {
+    return this.serviceA.getHello();
+  }
+}
+```
+
+상속관계에 있지 않는 경우 생성자 기반 주입 추천
+
+- 데코레이터 AOP 알아보기
+- 인터셉터
+- 필터
+- Pipe
+- 에러 핸들링은 그래서 어느 시점에 하는게 좋은가? (Class-validator는 어느 시점에 하는가?)
+- Nest에서 트랜잭션 처리는 어떻게 하는가?
+- GraphQL 스키마 코드 비교
+- 프론트와 그래서 어떻게 통신하는지?
+- 아키텍처(각각의 아키텍처와 SOLID 5원칙에 따른 장단점 비교)
+- 테스트(강의 후 어떤 가치관으로 테스트를 해야하고 그에 대한 예제)
+- 이전에 키워드 주신 기반으로 다시 발표

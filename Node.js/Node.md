@@ -102,6 +102,6 @@ Q) 그렇다면 비동기를 적용해놓고 다른 job이 없다면 이것은 �
 
 
 
-참조문서
+참조 문서
 * https://github.com/nodejs/node
 * https://nodejs.org/ko/docs/guides/event-loop-timers-and-nexttick/

@@ -27,3 +27,4 @@ AND id < 마지막조회ID # 직전 조회 결과의 마지막 id
 ORDER BY id DESC
 LIMIT 페이지사이즈
 ```
+

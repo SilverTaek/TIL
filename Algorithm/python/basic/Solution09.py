@@ -1,3 +1,4 @@
+
 res=0
 for i in range(n):
     tmp=input().split()

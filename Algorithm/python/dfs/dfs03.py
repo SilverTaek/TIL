@@ -17,3 +17,4 @@ def DFS(n):
 
 check = [0] * (N+1)
 DFS(1)
+

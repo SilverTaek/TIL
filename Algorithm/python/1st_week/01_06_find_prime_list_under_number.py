@@ -7,7 +7,7 @@ def find_prime_list_under_number(number):
     result = []
     for i in range(2, number + 1):
         for j in result:
-            if i % j == 0:
+            if j * j <= i and i % j == 0:
                 break
         else:
             result.append(i)
